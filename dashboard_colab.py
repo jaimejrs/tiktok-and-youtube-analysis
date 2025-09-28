@@ -129,7 +129,7 @@ else:
             labels = ['0-15s', '16-30s', '31-60s', '61-120s', '120s+']
             df_filtrado_copy = df_filtrado.copy()
             df_filtrado_copy['duration_bin'] = pd.cut(df_filtrado_copy['duration_sec'], bins=bins, labels=labels, right=False)
-            engagement_by_duration = df_filtrado_copy.groupby('duration_bin')['engagement_rate'].mean().reset_index()
+            engagement_by_duration = df_filtrado_copy.groupby('duration_bin', observed=True)['engagement_rate'].mean().reset_index()
             fig = px.bar(engagement_by_duration, x='duration_bin', y='engagement_rate', color='duration_bin', labels={'duration_bin': 'Faixa de Duração', 'engagement_rate': 'Taxa de Engajamento Média'})
             fig.update_layout(bargap=0.2)
             st.plotly_chart(fig, use_container_width=True)
@@ -196,14 +196,9 @@ else:
         fig.update_traces(textposition='middle center', textfont=dict(color='white'))
         fig.update_layout(showlegend=False)
         st.plotly_chart(fig, use_container_width=True)
-
         st.subheader("Taxa de Engajamento por Categoria e Região")
-      
         pivot_engagement = df_filtrado.pivot_table(values='engagement_rate', index='region', columns='category', aggfunc='mean')
-        
-       
         if not pivot_engagement.empty:
-           
             fig = px.imshow(pivot_engagement, text_auto=".3f", aspect="auto", 
                             labels=dict(x="Categoria", y="Região", color="Engajamento Médio"), 
                             color_continuous_scale='YlGnBu')
