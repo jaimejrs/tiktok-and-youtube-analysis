@@ -1,10 +1,5 @@
 # dashboard_colab.py
 
-# --- 1. Importação das Bibliotecas ---
-# Aqui, eu importo todas as ferramentas que vou precisar para o meu projeto.
-# O Streamlit é a base do meu dashboard. O Pandas é essencial para manipular os dados.
-# Plotly, a minha escolha para criar os gráficos interativos.
-# Scikit-learn e Transformers são para as análises mais avançadas de Machine Learning.
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -19,23 +14,10 @@ from sklearn.preprocessing import LabelEncoder
 from transformers import pipeline
 from scipy.stats import ttest_ind
 
-# --- 2. Configuração da Página ---
-# Defino que meu dashboard usará o layout "wide" (tela cheia) para melhor aproveitamento do espaço.
-# Também dou um título que aparecerá na aba do navegador.
 st.set_page_config(layout="wide", page_title="Análise de Vídeos Virais")
-
-# --- 3. Funções de Processamento de Dados com Cache ---
-# Para otimizar a performance, eu crio funções específicas para tarefas pesadas
-# e uso os "decoradores" de cache do Streamlit (@st.cache_data e @st.cache_resource).
-# Isso significa que essas operações só serão executadas uma vez, tornando o dashboard muito mais rápido.
 
 @st.cache_data
 def carregar_dados():
-    """
-    Minha função principal para carregar e preparar os dados.
-    Ela lê o arquivo CSV e cria colunas de data que serão úteis para as análises temporais.
-    O @st.cache_data garante que o CSV só seja lido uma vez.
-    """
     df = pd.read_csv(
         'youtube_shorts_tiktok_trends_2025.csv',
         encoding='ISO-8859-1',
@@ -48,20 +30,10 @@ def carregar_dados():
 
 @st.cache_resource
 def carregar_modelo_sentimento():
-    """
-    Esta função carrega o modelo de análise de sentimento da Hugging Face.
-    É uma operação muito pesada, então o @st.cache_resource é perfeito para garantir
-    que o modelo seja carregado na memória apenas na primeira vez que o app inicia.
-    """
     return pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
 @st.cache_data
 def analisar_sentimento(_df, _pipeline):
-    """
-    Aqui, eu aplico o modelo de sentimento nos comentários.
-    Para não sobrecarregar o app, pego uma amostra de 500 comentários.
-    A função interna 'get_sentiment' classifica cada comentário como Positivo, Negativo ou Neutro.
-    """
     if _df.empty: return pd.DataFrame()
     sample_size = min(len(_df[_df['sample_comments'].notna()]), 500)
     if sample_size == 0: return pd.DataFrame()
@@ -79,11 +51,6 @@ def analisar_sentimento(_df, _pipeline):
 
 @st.cache_resource
 def treinar_modelo_features(_df):
-    """
-    Nesta função, eu treino um modelo de Machine Learning (Random Forest) não para prever,
-    mas para descobrir quais fatores (features) são mais importantes para explicar
-    a taxa de engajamento. O @st.cache_resource armazena o modelo treinado.
-    """
     if _df.empty or _df.shape[0] < 10: return pd.Series()
     features_model = ['duration_sec', 'upload_hour', 'is_weekend', 'category', 'creator_tier']
     target = 'engagement_rate'
@@ -99,43 +66,30 @@ def treinar_modelo_features(_df):
     importances = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
     return importances
 
-# --- 4. Carregamento Inicial e Filtros ---
-# Executo a função para carregar os dados. O resultado fica guardado na variável 'df_original'.
 df_original = carregar_dados()
 
-# Crio a barra lateral do meu dashboard, onde coloco todos os filtros interativos.
 st.sidebar.header("Filtros")
 paises = st.sidebar.multiselect("Selecione os Países:", options=sorted(df_original['country'].unique()), default=df_original['country'].unique())
 plataformas = st.sidebar.multiselect("Selecione as Plataformas:", options=sorted(df_original['platform'].unique()), default=df_original['platform'].unique())
 tipos_dispositivo = st.sidebar.multiselect("Selecione o Device:", options=sorted(df_original['device_type'].unique()), default=df_original['device_type'].unique())
 
-# A mágica acontece aqui: eu filtro o DataFrame original com base nas seleções do usuário.
-# Todos os gráficos do painel usarão este 'df_filtrado'.
 df_filtrado = df_original.query("country == @paises and platform == @plataformas and device_type == @tipos_dispositivo")
 
-# --- 5. Construção do Dashboard ---
-# Adiciono o título principal do meu projeto.
 st.title("📊🎦 Análise de Performance de Vídeos Virais")
 
-# Crio uma verificação de segurança: se os filtros resultarem em nenhum dado,
-# eu exibo um aviso em vez de tentar desenhar os gráficos e gerar um erro.
 if df_filtrado.empty:
     st.warning("Nenhum dado encontrado para os filtros selecionados. Por favor, ajuste sua seleção.")
 else:
-    # Se houver dados, eu crio as abas para organizar meu storytelling.
     tab1, tab2, tab3, tab4 = st.tabs(["Visão Geral", "Análise dos Fatores", "Análise do Conteúdo", "Análise Geográfica"])
 
-    # --- ABA 1: VISÃO GERAL ---
     with tab1:
         st.header("Visão Geral dos Dados")
-        # Divido a aba em duas colunas para um layout 2x2.
         col1, col2 = st.columns(2)
         with col1:
             st.subheader("Tendência Mensal de Visualizações")
             df_tendencia_mensal = df_filtrado.groupby('year_month')['views'].sum().reset_index()
             fig = px.line(df_tendencia_mensal, x='year_month', y='views', markers=True, labels={'year_month': 'Mês', 'views': 'Total de Visualizações'})
             st.plotly_chart(fig, use_container_width=True)
-
             st.subheader("Distribuição do Engajamento por Plataforma")
             engagement_by_platform = df_filtrado.groupby('platform')['engagement_rate'].mean().reset_index()
             fig = px.pie(engagement_by_platform, values='engagement_rate', names='platform', title='Taxa de Engajamento Média', hole=.3)
@@ -145,22 +99,19 @@ else:
             df_tendencia_mensal_eng = df_filtrado.groupby('year_month')['engagement_rate'].mean().reset_index()
             fig = px.line(df_tendencia_mensal_eng, x='year_month', y='engagement_rate', markers=True, labels={'year_month': 'Mês', 'engagement_rate': 'Taxa de Engajamento Média'}, color_discrete_sequence=['green'])
             st.plotly_chart(fig, use_container_width=True)
-            
             st.subheader("Importância dos Fatores para o Engajamento")
             importancias_filtradas = treinar_modelo_features(df_filtrado)
             if not importancias_filtradas.empty:
                 fig = px.bar(importancias_filtradas, y=importancias_filtradas.index, x=importancias_filtradas.values, orientation='h', color=importancias_filtradas.index)
                 fig.update_layout(showlegend=False, yaxis={'categoryorder':'total ascending'}, xaxis_title='Importância Relativa', yaxis_title='Fator')
                 st.plotly_chart(fig, use_container_width=True)
-        
-        st.markdown("---") # Uma linha divisória para separar visualmente
+        st.markdown("---")
         st.subheader("Taxa de Engajamento por Tipo de Dispositivo")
         engagement_by_device = df_filtrado.groupby('device_type')['engagement_rate'].mean().sort_values(ascending=False).reset_index()
         fig_device = px.bar(engagement_by_device, x='device_type', y='engagement_rate', color='device_type', labels={'device_type': 'Tipo de Dispositivo', 'engagement_rate': 'Taxa de Engajamento Média'}, log_y=True)
         fig_device.update_layout(showlegend=False)
         st.plotly_chart(fig_device, use_container_width=True)
 
-    # --- ABA 2: ANÁLISE DOS FATORES ---
     with tab2:
         st.header("Análise de Fatores de Performance")
         col1, col2 = st.columns(2)
@@ -168,3 +119,91 @@ else:
             st.subheader("Engajamento por Hora de Upload")
             engagement_by_hour = df_filtrado.groupby('upload_hour')['engagement_rate'].mean().reset_index()
             fig = px.line(engagement_by_hour, x='upload_hour', y='engagement_rate', markers=True, labels={'upload_hour': 'Hora do Dia (24h)', 'engagement_rate': 'Taxa de Engajamento Média'})
+            st.plotly_chart(fig, use_container_width=True)
+            st.subheader("Engajamento Total Mediano por Categoria")
+            engagement_by_category = df_filtrado.groupby('category')['engagement_total'].median().sort_values(ascending=False)
+            fig = px.bar(engagement_by_category, x=engagement_by_category.index, y=engagement_by_category.values, color=engagement_by_category.index, labels={'x': 'Categoria', 'y': 'Engajamento Mediano'})
+            fig.update_layout(yaxis_type="log", showlegend=False, bargap=0.2)
+            st.plotly_chart(fig, use_container_width=True)
+        with col2:
+            st.subheader("Engajamento por Duração do Vídeo")
+            bins = [0, 15, 30, 60, 120, np.inf]
+            labels = ['0-15s', '16-30s', '31-60s', '61-120s', '120s+']
+            df_filtrado_copy = df_filtrado.copy()
+            df_filtrado_copy['duration_bin'] = pd.cut(df_filtrado_copy['duration_sec'], bins=bins, labels=labels, right=False)
+            engagement_by_duration = df_filtrado_copy.groupby('duration_bin', observed=True)['engagement_rate'].mean().reset_index()
+            fig = px.bar(engagement_by_duration, x='duration_bin', y='engagement_rate', color='duration_bin', labels={'duration_bin': 'Faixa de Duração', 'engagement_rate': 'Taxa de Engajamento Média'})
+            fig.update_layout(bargap=0.2)
+            st.plotly_chart(fig, use_container_width=True)
+            st.subheader("Engajamento por Dia da Semana")
+            engagement_by_weekday = df_filtrado.groupby('publish_dayofweek')['engagement_rate'].mean().reindex(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']).reset_index()
+            fig = px.bar(engagement_by_weekday, x='publish_dayofweek', y='engagement_rate', color='publish_dayofweek', labels={'publish_dayofweek': 'Dia da Semana', 'engagement_rate': 'Taxa de Engajamento Média'}, log_y=True)
+            fig.update_layout(showlegend=False, bargap=0.2)
+            st.plotly_chart(fig, use_container_width=True)
+
+    with tab3:
+        st.header("Análise do Conteúdo dos Vídeos")
+        st.subheader("Top 10 Palavras-chave (Alto Engajamento)")
+        high_engagement_threshold = df_filtrado['engagement_rate'].quantile(0.75)
+        df_high_engagement = df_filtrado[df_filtrado['engagement_rate'] >= high_engagement_threshold]
+        all_keywords = " ".join(df_high_engagement['title_keywords'].dropna())
+        words = re.findall(r'\b\w+\b', all_keywords.lower())
+        stopwords = ['a', 'o', 'e', 'de', 'do', 'da', 'em', 'um', 'para', 'com', 'não', 'os', 'as','â','for','in','on','is','i','to']
+        filtered_words = [word for word in words if word not in stopwords and not word.isdigit()]
+        word_counts = Counter(filtered_words)
+        top_words = pd.DataFrame(word_counts.most_common(10), columns=['Palavra', 'Frequência'])
+        fig = px.bar(top_words, x='Frequência', y='Palavra', orientation='h', color='Palavra')
+        fig.update_layout(yaxis={'categoryorder':'total ascending'}, showlegend=False, bargap=0.2)
+        st.plotly_chart(fig, use_container_width=True)
+        st.subheader("Análise de Sentimento dos Comentários")
+        sentiment_pipeline = carregar_modelo_sentimento()
+        with st.spinner("Analisando sentimentos (amostra de 500)... Isso pode levar um minuto."):
+            df_sentimento = analisar_sentimento(df_filtrado, sentiment_pipeline)
+        if not df_sentimento.empty:
+            sentiment_distribution = df_sentimento.groupby(['category', 'sentiment']).size().unstack(fill_value=0)
+            fig = go.Figure()
+            colors = {'Positivo': 'seagreen', 'Neutro': 'gold', 'Negativo': 'tomato'}
+            for sentiment in sentiment_distribution.columns:
+                fig.add_trace(go.Bar(name=sentiment, x=sentiment_distribution.index, y=sentiment_distribution[sentiment], marker_color=colors.get(sentiment)))
+            fig.update_layout(barmode='stack', title='Distribuição de Sentimento por Categoria', xaxis_title='Categoria', yaxis_title='Número de Comentários')
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("Não há comentários para analisar com os filtros atuais.")
+        st.subheader("Teste A/B: Engajamento com vs. Sem Emoji no Título")
+        com_emoji = df_filtrado[df_filtrado['has_emoji'] == 1]['engagement_rate'].dropna()
+        sem_emoji = df_filtrado[df_filtrado['has_emoji'] == 0]['engagement_rate'].dropna()
+        if not com_emoji.empty and not sem_emoji.empty:
+            hist_data = [com_emoji, sem_emoji]
+            group_labels = ['Com Emoji', 'Sem Emoji']
+            colors = ['#EF553B', '#636EFA']
+            fig = ff.create_distplot(hist_data, group_labels, bin_size=.005, colors=colors, show_rug=False)
+            fig.update_layout(title_text='Distribuição da Taxa de Engajamento', xaxis_title='Taxa de Engajamento', yaxis_title='Densidade')
+            st.plotly_chart(fig, use_container_width=True)
+            stat, p_value = ttest_ind(com_emoji, sem_emoji, equal_var=False)
+            col1_metric, col2_metric = st.columns(2)
+            col1_metric.metric(label="Estatística do Teste T", value=f"{stat:.4f}")
+            col2_metric.metric(label="P-valor", value=f"{p_value:.4f}")
+        else:
+            st.info("Não há dados suficientes para realizar o Teste A/B com os filtros atuais.")
+
+    with tab4:
+        st.header("Análise Geográfica")
+        st.subheader("Performance por País (Visualizações vs. Engajamento)")
+        analise_paises = df_filtrado.groupby('country').agg(avg_views=('views', 'mean'), avg_engagement_rate=('engagement_rate', 'mean'), video_count=('row_id', 'count')).reset_index()
+        fig = px.scatter(
+            analise_paises, x='avg_views', y='avg_engagement_rate',
+            size='video_count', color='country', hover_name='country',
+            log_x=True, size_max=60, text='country',
+            labels={"avg_views": "Média de Visualizações (Log)", "avg_engagement_rate": "Taxa de Engajamento Média"})
+        fig.update_traces(textposition='middle center', textfont=dict(color='white'))
+        fig.update_layout(showlegend=False)
+        st.plotly_chart(fig, use_container_width=True)
+        st.subheader("Taxa de Engajamento por Categoria e Região")
+        pivot_engagement = df_filtrado.pivot_table(values='engagement_rate', index='region', columns='category', aggfunc='mean')
+        if not pivot_engagement.empty:
+            fig = px.imshow(pivot_engagement, text_auto=".3f", aspect="auto", 
+                            labels=dict(x="Categoria", y="Região", color="Engajamento Médio"), 
+                            color_continuous_scale='YlGnBu')
+            st.plotly_chart(fig, use_container_width=True)
+        else:
+            st.info("Não há dados suficientes para criar o heatmap de Categoria e Região com os filtros atuais.")
