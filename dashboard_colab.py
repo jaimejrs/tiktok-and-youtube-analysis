@@ -210,7 +210,3 @@ else:
             st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("Não há dados suficientes para criar o heatmap de Categoria e Região com os filtros atuais.")
-
-
-!git config --global user.name "JaimeJrs"
-!git config --global user.email "jaimetjribeiro@gmail.com"
