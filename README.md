@@ -18,8 +18,8 @@ Este dashboard foi desenvolvido como parte de um projeto de análise de dados pa
 
 ### Screenshot do Dashboard
 
-![Banner do Dashboard](https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/7dc68c01cf11fea09fafa87e9da2126eb0c1f00e/geral.jpg)
-![Banner do Dashboard](https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/7dc68c01cf11fea09fafa87e9da2126eb0c1f00e/geografico.jpg)
+![Print do Dashboard](https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/7dc68c01cf11fea09fafa87e9da2126eb0c1f00e/geral.jpg)
+![Print do Dashboard](https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/7dc68c01cf11fea09fafa87e9da2126eb0c1f00e/geografico.jpg)
 
 
 ### 🛠️ Tecnologias Utilizadas
@@ -36,7 +36,7 @@ Este dashboard foi desenvolvido como parte de um projeto de análise de dados pa
 Para executar este projeto localmente, siga os passos abaixo:
 1. **Clone o repositório:**
 
-git clone [Tiktok and Youtube Analysis](https://github.com/jaimejrs/tiktok-and-youtube-analysis.git)
+git clone [https://github.com/jaimejrs/tiktok-and-youtube-analysis.git](https://github.com/jaimejrs/tiktok-and-youtube-analysis.git)
 
 2. **Navegue até o diretório do projeto:**
 
