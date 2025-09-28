@@ -6,7 +6,7 @@
 
 Este projeto consiste em um dashboard interativo construído com Python e Streamlit para a análise exploratória de dados de vídeos virais das plataformas TikTok e YouTube Shorts. O painel permite a visualização de tendências, análise de fatores de engajamento, exploração de conteúdo e performance geográfica.
 
-Este dashboard foi desenvolvido como parte de um projeto de análise de dados para demonstrar habilidades em visualização de dados, modelagem de machine learning e desenvolvimento de aplicações web interativas para a cadeira de Business Inteligence do curso de Adminitração da UFC.
+Este dashboard foi desenvolvido como parte de um projeto de análise de dados para demonstrar habilidades em ETL, criação de gráficos, visualização de dados, modelagem de machine learning e desenvolvimento de aplicações web interativas para a cadeira de Business Inteligence do curso de Adminitração da UFC.
 
 ### Principais Funcionalidades
 
@@ -36,7 +36,7 @@ Este dashboard foi desenvolvido como parte de um projeto de análise de dados pa
 Para executar este projeto localmente, siga os passos abaixo:
 1. **Clone o repositório:**
 
-git clone [https://github.com/jaimejrs/tiktok-and-youtube-analysis.git](https://github.com/jaimejrs/tiktok-and-youtube-analysis.git)
+git clone [Tiktok and Youtube Analysis](https://github.com/jaimejrs/tiktok-and-youtube-analysis.git)
 
 2. **Navegue até o diretório do projeto:**
 
