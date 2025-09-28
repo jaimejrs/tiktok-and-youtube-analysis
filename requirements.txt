@@ -3,8 +3,11 @@ pandas
 plotly
 plotly-express
 scikit-learn
-transformers
-torch
+
+torch==2.1.2
+transformers==4.35.2
+sentencepiece
+
 pyngrok
 numpy
 matplotlib
