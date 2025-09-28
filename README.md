@@ -1,5 +1,7 @@
 # 📊 Dashboard de Análise de Vídeos Virais (TikTok & YouTube)
 
+[🚀 Acesse o Dashboard Interativo aqui!](https://tiktok-and-youtube-analysis-d5l4tgkxmevvehe9xyogta.streamlit.app/)
+
 ## Descrição do Projeto
 
 Este projeto consiste em um dashboard interativo construído com Python e Streamlit para a análise exploratória de dados de vídeos virais das plataformas TikTok e YouTube Shorts. O painel permite a visualização de tendências, análise de fatores de engajamento, exploração de conteúdo e performance geográfica.
