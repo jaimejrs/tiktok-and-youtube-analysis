@@ -149,3 +149,22 @@ else:
             st.subheader("Importância dos Fatores para o Engajamento")
             importancias_filtradas = treinar_modelo_features(df_filtrado)
             if not importancias_filtradas.empty:
+                fig = px.bar(importancias_filtradas, y=importancias_filtradas.index, x=importancias_filtradas.values, orientation='h', color=importancias_filtradas.index)
+                fig.update_layout(showlegend=False, yaxis={'categoryorder':'total ascending'}, xaxis_title='Importância Relativa', yaxis_title='Fator')
+                st.plotly_chart(fig, use_container_width=True)
+        
+        st.markdown("---") # Uma linha divisória para separar visualmente
+        st.subheader("Taxa de Engajamento por Tipo de Dispositivo")
+        engagement_by_device = df_filtrado.groupby('device_type')['engagement_rate'].mean().sort_values(ascending=False).reset_index()
+        fig_device = px.bar(engagement_by_device, x='device_type', y='engagement_rate', color='device_type', labels={'device_type': 'Tipo de Dispositivo', 'engagement_rate': 'Taxa de Engajamento Média'}, log_y=True)
+        fig_device.update_layout(showlegend=False)
+        st.plotly_chart(fig_device, use_container_width=True)
+
+    # --- ABA 2: ANÁLISE DOS FATORES ---
+    with tab2:
+        st.header("Análise de Fatores de Performance")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Engajamento por Hora de Upload")
+            engagement_by_hour = df_filtrado.groupby('upload_hour')['engagement_rate'].mean().reset_index()
+            fig = px.line(engagement_by_hour, x='upload_hour', y='engagement_rate', markers=True, labels={'upload_hour': 'Hora do Dia (24h)', 'engagement_rate': 'Taxa de Engajamento Média'})
