@@ -1,6 +1,6 @@
 # 📊 Dashboard de Análise de Vídeos Virais (TikTok & YouTube)
 
-[🚀 Acesse o Dashboard Interativo aqui!](https://tiktok-and-youtube-analysis-d5l4tgkxmevvehe9xyogta.streamlit.app/)
+[🚀 Acesse o Dash!](https://tiktok-and-youtube-analysis-d5l4tgkxmevvehe9xyogta.streamlit.app/)
 
 ## Descrição do Projeto
 
