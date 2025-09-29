@@ -135,12 +135,7 @@ else:
                 fig.update_layout(showlegend=False, yaxis={'categoryorder':'total ascending'}, xaxis_title='Importância Relativa', yaxis_title='Fator')
                 st.plotly_chart(fig, use_container_width=True)
         st.markdown("---")
-        st.subheader("Taxa de Engajamento por Tipo de Dispositivo")
-        engagement_by_device = df_filtrado.groupby('device_type')['engagement_rate'].mean().sort_values(ascending=False).reset_index()
-        fig_device = px.bar(engagement_by_device, x='device_type', y='engagement_rate', color='device_type', labels={'device_type': 'Tipo de Dispositivo', 'engagement_rate': 'Taxa de Engajamento Média'}, log_y=True)
-        fig_device.update_layout(showlegend=False)
-        st.plotly_chart(fig_device, use_container_width=True)
-
+       
 # --- ABA 2: ANÁLISE DOS FATORES ---
     
     with tab2:
