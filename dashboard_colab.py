@@ -36,16 +36,16 @@ def carregar_dados():
     df['publish_dayofweek'] = df['publish_date_approx'].dt.day_name()
     return df
     
-'''Esta função carrega o modelo de análise de sentimento da Hugging Face. 
-É uma operação muito pesada, então o @st.cache_resource garante que o modelo seja carregado na memória apenas na primeira vez que o app inicia.'''
+#Esta função carrega o modelo de análise de sentimento da Hugging Face. 
+#É uma operação muito pesada, então o @st.cache_resource garante que o modelo seja carregado na memória apenas na primeira vez que o app inicia.
 
 @st.cache_resource
 def carregar_modelo_sentimento():    
     return pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
-''' Aqui, eu aplico o modelo de sentimento nos comentários.
-    Para não sobrecarregar o app, pego uma amostra de 500 comentários.
-    A função interna 'get_sentiment' classifica cada comentário como Positivo, Negativo ou Neutro.'''
+# Aqui, eu aplico o modelo de sentimento nos comentários.
+# Para não sobrecarregar o app, pego uma amostra de 500 comentários.
+# A função interna 'get_sentiment' classifica cada comentário como Positivo, Negativo ou Neutro.
 
 @st.cache_data
 def analisar_sentimento(_df, _pipeline):
@@ -64,9 +64,9 @@ def analisar_sentimento(_df, _pipeline):
     df_sample['sentiment'] = df_sample['sample_comments'].apply(get_sentiment)
     return df_sample
 
-''' Nesta função, eu treino um modelo de Machine Learning (Random Forest) não para prever,
-    mas para descobrir quais fatores (features) são mais importantes para explicar
-    a taxa de engajamento. O @st.cache_resource armazena o modelo treinado.'''
+# Nesta função, eu treino um modelo de Machine Learning (Random Forest) não para prever,
+# mas para descobrir quais fatores (features) são mais importantes para explicar
+# a taxa de engajamento. O @st.cache_resource armazena o modelo treinado.
 
 @st.cache_resource
 def treinar_modelo_features(_df):
