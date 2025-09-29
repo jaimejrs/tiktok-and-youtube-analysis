@@ -1,7 +1,7 @@
 [![author](https://img.shields.io/badge/author-jaimejrs-red.svg)](https://www.linkedin.com/in/jaimejrs) [![](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/release/python-365/)
 
 <p align="center">
-  <img src="/img/github_cover.png" >
+  <img src="https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/891cc3f18ed911f619c91b77eaa3337fd584d3fe/tiktokbanner.jpeg" >
 </p>
 
 # 📊 Dashboard de Análise de Vídeos Virais (TikTok & YouTube)
