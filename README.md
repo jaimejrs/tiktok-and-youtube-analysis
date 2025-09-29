@@ -1,3 +1,9 @@
+[![author](https://img.shields.io/badge/author-jaimejrs-red.svg)](https://www.linkedin.com/in/jaimejrs) [![](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/release/python-365/)
+
+<p align="center">
+  <img src="/img/github_cover.png" >
+</p>
+
 # 📊 Dashboard de Análise de Vídeos Virais (TikTok & YouTube)
 
 [🚀 Acesse a minha análise aqui!](https://tiktok-and-youtube-analysis-d5l4tgkxmevvehe9xyogta.streamlit.app/)
