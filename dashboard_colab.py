@@ -1,5 +1,11 @@
 # dashboard_colab.py
 
+# --- 1. Importação das Bibliotecas ---
+# Aqui, eu importo todas as ferramentas que vou precisar para o meu projeto.
+# O Streamlit é a base do meu dashboard. O Pandas é essencial para manipular os dados.
+# Plotly, a minha escolha para criar os gráficos interativos.
+# Scikit-learn e Transformers são para as análises mais avançadas de Machine Learning.
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -14,6 +20,8 @@ from sklearn.preprocessing import LabelEncoder
 from transformers import pipeline
 from scipy.stats import ttest_ind
 
+# --- 2. Configuração da Página ---
+
 st.set_page_config(layout="wide", page_title="Análise de Vídeos Virais")
 
 @st.cache_data
@@ -27,10 +35,17 @@ def carregar_dados():
     df['year_month'] = df['publish_date_approx'].dt.to_period('M').astype(str)
     df['publish_dayofweek'] = df['publish_date_approx'].dt.day_name()
     return df
+    
+'''Esta função carrega o modelo de análise de sentimento da Hugging Face. 
+É uma operação muito pesada, então o @st.cache_resource garante que o modelo seja carregado na memória apenas na primeira vez que o app inicia.'''
 
 @st.cache_resource
-def carregar_modelo_sentimento():
+def carregar_modelo_sentimento():    
     return pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
+
+''' Aqui, eu aplico o modelo de sentimento nos comentários.
+    Para não sobrecarregar o app, pego uma amostra de 500 comentários.
+    A função interna 'get_sentiment' classifica cada comentário como Positivo, Negativo ou Neutro.'''
 
 @st.cache_data
 def analisar_sentimento(_df, _pipeline):
@@ -49,6 +64,10 @@ def analisar_sentimento(_df, _pipeline):
     df_sample['sentiment'] = df_sample['sample_comments'].apply(get_sentiment)
     return df_sample
 
+''' Nesta função, eu treino um modelo de Machine Learning (Random Forest) não para prever,
+    mas para descobrir quais fatores (features) são mais importantes para explicar
+    a taxa de engajamento. O @st.cache_resource armazena o modelo treinado.'''
+
 @st.cache_resource
 def treinar_modelo_features(_df):
     if _df.empty or _df.shape[0] < 10: return pd.Series()
@@ -66,7 +85,12 @@ def treinar_modelo_features(_df):
     importances = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
     return importances
 
+# --- 4. Carregamento Inicial e Filtros ---
+# Executo a função para carregar os dados. O resultado fica guardado na variável 'df_original'.
+
 df_original = carregar_dados()
+
+# Criaçãp da barra lateral
 
 st.sidebar.header("Filtros")
 paises = st.sidebar.multiselect("Selecione os Países:", options=sorted(df_original['country'].unique()), default=df_original['country'].unique())
@@ -75,6 +99,9 @@ tipos_dispositivo = st.sidebar.multiselect("Selecione o Device:", options=sorted
 
 df_filtrado = df_original.query("country == @paises and platform == @plataformas and device_type == @tipos_dispositivo")
 
+# --- 5. Construção do Dashboard ---
+# Adiciono o título principal do meu projeto.
+
 st.title("📊🎦 Análise de Performance de Vídeos Virais")
 
 if df_filtrado.empty:
@@ -82,6 +109,8 @@ if df_filtrado.empty:
 else:
     tab1, tab2, tab3, tab4 = st.tabs(["Visão Geral", "Análise dos Fatores", "Análise do Conteúdo", "Análise Geográfica"])
 
+# --- ABA 1: VISÃO GERAL ---
+    
     with tab1:
         st.header("Visão Geral dos Dados")
         col1, col2 = st.columns(2)
@@ -112,6 +141,8 @@ else:
         fig_device.update_layout(showlegend=False)
         st.plotly_chart(fig_device, use_container_width=True)
 
+# --- ABA 2: ANÁLISE DOS FATORES ---
+    
     with tab2:
         st.header("Análise de Fatores de Performance")
         col1, col2 = st.columns(2)
@@ -127,6 +158,7 @@ else:
             st.plotly_chart(fig, use_container_width=True)
         with col2:
             st.subheader("Engajamento por Duração do Vídeo")
+    # Crio faixas (bins) de duração para agrupar os vídeos e facilitar a análise.
             bins = [0, 15, 30, 60, 120, np.inf]
             labels = ['0-15s', '16-30s', '31-60s', '61-120s', '120s+']
             df_filtrado_copy = df_filtrado.copy()
@@ -140,14 +172,18 @@ else:
             fig = px.bar(engagement_by_weekday, x='publish_dayofweek', y='engagement_rate', color='publish_dayofweek', labels={'publish_dayofweek': 'Dia da Semana', 'engagement_rate': 'Taxa de Engajamento Média'}, log_y=True)
             fig.update_layout(showlegend=False, bargap=0.2)
             st.plotly_chart(fig, use_container_width=True)
+  
+    # --- ABA 3: ANÁLISE DO CONTEÚDO ---
 
     with tab3:
         st.header("Análise do Conteúdo dos Vídeos")
         st.subheader("Top 10 Palavras-chave (Alto Engajamento)")
+# Para encontrar as palavras mais relevantes, eu primeiro filtro os vídeos com maior engajamento (acima do quartil 75).
         high_engagement_threshold = df_filtrado['engagement_rate'].quantile(0.75)
         df_high_engagement = df_filtrado[df_filtrado['engagement_rate'] >= high_engagement_threshold]
         all_keywords = " ".join(df_high_engagement['title_keywords'].dropna())
         words = re.findall(r'\b\w+\b', all_keywords.lower())
+# LIMPANDO PALAVRAS GENÉRICAS
         stopwords = ['a', 'o', 'e', 'de', 'do', 'da', 'em', 'um', 'para', 'com', 'não', 'os', 'as','â','for','in','on','is','i','to']
         filtered_words = [word for word in words if word not in stopwords and not word.isdigit()]
         word_counts = Counter(filtered_words)
@@ -179,12 +215,15 @@ else:
             fig = ff.create_distplot(hist_data, group_labels, bin_size=.005, colors=colors, show_rug=False)
             fig.update_layout(title_text='Distribuição da Taxa de Engajamento', xaxis_title='Taxa de Engajamento', yaxis_title='Densidade')
             st.plotly_chart(fig, use_container_width=True)
+ # Teste estatístico (Teste T) para verificar se a diferença observada é significativa.
             stat, p_value = ttest_ind(com_emoji, sem_emoji, equal_var=False)
             col1_metric, col2_metric = st.columns(2)
             col1_metric.metric(label="Estatística do Teste T", value=f"{stat:.4f}")
             col2_metric.metric(label="P-valor", value=f"{p_value:.4f}")
         else:
             st.info("Não há dados suficientes para realizar o Teste A/B com os filtros atuais.")
+            
+# --- ABA 4: ANÁLISE GEOGRÁFICA ---
 
     with tab4:
         st.header("Análise Geográfica")
