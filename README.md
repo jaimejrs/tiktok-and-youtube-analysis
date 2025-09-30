@@ -14,6 +14,14 @@ Este projeto consiste em um dashboard interativo construído com Python e Stream
 
 Este dashboard foi desenvolvido como parte de um projeto de análise de dados para demonstrar habilidades em ETL, criação de gráficos, visualização de dados, modelagem de machine learning e desenvolvimento de aplicações web interativas para a cadeira de Business Inteligence do curso de Adminitração da UFC.
 
+### Sobre o Conjunto de Dados 
+
+[Acesse os dados aqui!](https://www.kaggle.com/datasets/tarekmasryo/youtube-shorts-and-tiktok-trends-2025)
+
+Para esta análise, foi utilizado o dataset youtube_shorts_tiktok_trends_2025.csv, que agrega uma rica coleção de informações sobre vídeos de formato curto, abrangendo as plataformas TikTok e YouTube Shorts. A estrutura do dataset foi projetada para permitir uma investigação multifacetada dos fatores que impulsionam o sucesso de um vídeo. As colunas disponíveis podem ser agrupadas em três categorias principais: métricas de performance, como total de visualizações, taxa de engajamento, curtidas e compartilhamentos; atributos de conteúdo, que descrevem o vídeo em si, incluindo sua categoria (ex: Gaming, Food, Art), duração, palavras-chave do título e uso de emojis; e dados contextuais, que fornecem informações sobre a origem e distribuição, como plataforma, país, região, tipo de dispositivo e dados temporais (dia da semana e hora da publicação).
+
+Essa combinação de dados quantitativos e qualitativos oferece uma base sólida para aplicar técnicas de análise exploratória, modelagem estatística e machine learning, com o objetivo final de extrair insights acionáveis sobre o que define um conteúdo viral e como otimizar a performance de vídeos curtos
+
 ### Principais Funcionalidades
 
 - **Visão Geral:** Métricas de performance, tendências temporais de visualizações e engajamento.
