@@ -1,4 +1,4 @@
-[![author](https://img.shields.io/badge/author-jaimejrs-red.svg)](https://www.linkedin.com/in/jaimejrs) [![](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/release/python-3137/) [![CC0: Domínio Público](https://img.shields.io/badge/License-CC0-blue.svg)](http://perso.crans.org/besson/LICENSE.html
+[![author](https://img.shields.io/badge/author-jaimejrs-red.svg)](https://www.linkedin.com/in/jaimejrs) [![](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/release/python-3137/) [![CC0: Domínio Público](https://img.shields.io/badge/License-CC0-white.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 <p align="center">
   <img src="https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/891cc3f18ed911f619c91b77eaa3337fd584d3fe/tiktokbanner.jpeg" >
