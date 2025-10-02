@@ -34,7 +34,7 @@ df_original = carregar_dados('data/youtube_shorts_tiktok_trends_2025.csv')
 
 st.sidebar.header("Filtros")
 
-# --- FILTRO DE PAÍSES ---
+# --- FILTRO DE PAÍSES (multiselect com "Selecionar Todos") ---
 todos_paises_options = sorted(df_original['country'].unique())
 selecionar_todos_paises = st.sidebar.checkbox("Selecionar Todos os Países", value=True)
 
@@ -42,7 +42,7 @@ if selecionar_todos_paises:
     paises_selecionados = st.sidebar.multiselect(
         "Selecione os Países:",
         options=todos_paises_options,
-        default=todos_paises_options  # Começa com todos selecionados
+        default=todos_paises_options
     )
 else:
     paises_selecionados = st.sidebar.multiselect(
@@ -50,26 +50,43 @@ else:
         options=todos_paises_options
     )
 
-# --- FILTRO DE PLATAFORMA  ---
-plataforma_selecionada = st.sidebar.radio(
-    "Selecione a Plataforma:",
-    options=sorted(df_original['platform'].unique()),
-    horizontal=True  # Deixa os botões lado a lado para economizar espaço
-)
+# --- FILTRO DE PLATAFORMAS (multiselect com "Selecionar Todas") ---
+todas_plataformas_options = sorted(df_original['platform'].unique())
+selecionar_todas_plataformas = st.sidebar.checkbox("Selecionar Todas as Plataformas", value=True)
 
-# --- FILTRO DE DISPOSITIVO  ---
-tipo_dispositivo_selecionado = st.sidebar.radio(
-    "Selecione o Device:",
-    options=sorted(df_original['device_type'].unique()),
-    horizontal=True
-)
+if selecionar_todas_plataformas:
+    plataformas_selecionadas = st.sidebar.multiselect(
+        "Selecione as Plataformas:",
+        options=todas_plataformas_options,
+        default=todas_plataformas_options
+    )
+else:
+    plataformas_selecionadas = st.sidebar.multiselect(
+        "Selecione as Plataformas:",
+        options=todas_plataformas_options
+    )
+
+# --- FILTRO DE DISPOSITIVOS ---
+todos_dispositivos_options = sorted(df_original['device_type'].unique())
+selecionar_todos_dispositivos = st.sidebar.checkbox("Selecionar Todos os Dispositivos", value=True)
+
+if selecionar_todos_dispositivos:
+    dispositivos_selecionados = st.sidebar.multiselect(
+        "Selecione o Device:",
+        options=todos_dispositivos_options,
+        default=todos_dispositivos_options
+    )
+else:
+    dispositivos_selecionados = st.sidebar.multiselect(
+        "Selecione o Device:",
+        options=todos_dispositivos_options
+    )
 
 # --- LÓGICA DE FILTRAGEM ---
-# O .query() foi ajustado para lidar com uma lista (paises) e strings (plataforma/dispositivo)
+# A query funciona perfeitamente com as listas geradas pelos multiselects
 df_filtrado = df_original.query(
-    "country == @paises_selecionados and platform == @plataforma_selecionada and device_type == @tipo_dispositivo_selecionado"
+    "country == @paises_selecionados and platform == @plataformas_selecionadas and device_type == @dispositivos_selecionados"
 )
-
 # --- 4. Construção do Dashboard ---
 st.title("📊🎦 Análise de Performance de Vídeos Virais")
 
