@@ -30,19 +30,47 @@ st.set_page_config(layout="wide", page_title="Análise de Vídeos Virais")
 
 # --- 3. Carregamento Inicial e Filtros ---
 
-# CORREÇÃO APLICADA: O caminho para o arquivo de dados agora inclui a pasta 'data/'.
 df_original = carregar_dados('data/youtube_shorts_tiktok_trends_2025.csv')
 
 st.sidebar.header("Filtros")
-paises = st.sidebar.multiselect("Selecione os Países:", options=sorted(df_original['country'].unique()), default=df_original['country'].unique())
-plataformas = st.sidebar.multiselect("Selecione as Plataformas:", options=sorted(df_original['platform'].unique()), default=df_original['platform'].unique())
-tipos_dispositivo = st.sidebar.multiselect("Selecione o Device:", options=sorted(df_original['device_type'].unique()), default=df_original['device_type'].unique())
 
-df_filtrado = df_original.query(
-    "country == @paises and platform == @plataformas and device_type == @tipos_dispositivo"
+# --- FILTRO DE PAÍSES ---
+todos_paises_options = sorted(df_original['country'].unique())
+selecionar_todos_paises = st.sidebar.checkbox("Selecionar Todos os Países", value=True)
+
+if selecionar_todos_paises:
+    paises_selecionados = st.sidebar.multiselect(
+        "Selecione os Países:",
+        options=todos_paises_options,
+        default=todos_paises_options  # Começa com todos selecionados
+    )
+else:
+    paises_selecionados = st.sidebar.multiselect(
+        "Selecione os Países:",
+        options=todos_paises_options
+    )
+
+# --- FILTRO DE PLATAFORMA  ---
+plataforma_selecionada = st.sidebar.radio(
+    "Selecione a Plataforma:",
+    options=sorted(df_original['platform'].unique()),
+    horizontal=True  # Deixa os botões lado a lado para economizar espaço
 )
 
-# --- 4. Construção do Dashboard (UI) ---
+# --- FILTRO DE DISPOSITIVO  ---
+tipo_dispositivo_selecionado = st.sidebar.radio(
+    "Selecione o Device:",
+    options=sorted(df_original['device_type'].unique()),
+    horizontal=True
+)
+
+# --- LÓGICA DE FILTRAGEM ---
+# O .query() foi ajustado para lidar com uma lista (paises) e strings (plataforma/dispositivo)
+df_filtrado = df_original.query(
+    "country == @paises_selecionados and platform == @plataforma_selecionada and device_type == @tipo_dispositivo_selecionado"
+)
+
+# --- 4. Construção do Dashboard ---
 st.title("📊🎦 Análise de Performance de Vídeos Virais")
 
 if df_filtrado.empty:
