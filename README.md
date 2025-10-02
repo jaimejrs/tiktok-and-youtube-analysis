@@ -1,4 +1,4 @@
-[![author](https://img.shields.io/badge/author-jaimejrs-red.svg)](https://www.linkedin.com/in/jaimejrs) [![](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/release/python-3137/) [![CC0: Domínio Público](https://img.shields.io/badge/License-CC0-white.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
+[![author](https://img.shields.io/badge/author-jaimejrs-red.svg)](https://www.linkedin.com/in/jaimejrs) [![](https://img.shields.io/badge/python-3.0+-blue.svg)](https://www.python.org/downloads/release/python-3137/) [![CC0: Domínio Público](https://img.shields.io/badge/License-CC0-white.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 
 <p align="center">
   <img src="https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/891cc3f18ed911f619c91b77eaa3337fd584d3fe/tiktokbanner.jpeg" >
@@ -38,33 +38,56 @@ Essa combinação de dados quantitativos e qualitativos oferece uma base sólida
 
 ### 🛠️ Tecnologias Utilizadas
 
-* **Linguagem:** Python 3
-* **Análise de Dados:** Pandas, NumPy
-* **Visualização de Dados:** Plotly, Matplotlib, Seaborn
-* **Dashboard Interativo:** Streamlit
-* **Machine Learning:** Scikit-learn (Random Forest), Transformers (Hugging Face para análise de sentimento)
-* **Ambiente de Desenvolvimento:** Google Colab, Jupyter
+Este projeto foi construído utilizando um ecossistema moderno de ferramentas de Python para análise e visualização de dados.
 
-### Como Executar o Projeto
+* **Linguagem:** `Python 3`
+* **Análise e Manipulação de Dados:** `Pandas`, `NumPy`
+* **Cálculo Científico:** `SciPy` (para testes estatísticos)
+* **Visualização de Dados:** `Plotly`
+* **Dashboard Interativo:** `Streamlit`
+* **Machine Learning e NLP:**
+    * `Scikit-learn` (para o modelo de *Random Forest*)
+    * `Transformers` (Hugging Face para Análise de Sentimento)
+    * `NLTK` (para processamento de texto e *stopwords*)
 
-Para executar este projeto localmente, siga os passos abaixo:
-1. **Clone o repositório:**
+### 🚀 Como Executar o Projeto
 
-git clone [https://github.com/jaimejrs/tiktok-and-youtube-analysis.git](https://github.com/jaimejrs/tiktok-and-youtube-analysis.git)
+Para executar este dashboard interativo em sua máquina local, siga os passos abaixo:
 
-2. **Navegue até o diretório do projeto:**
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/jaimejrs/tiktok-and-youtube-analysis.git](https://github.com/jaimejrs/tiktok-and-youtube-analysis.git)
+    ```
 
-cd tiktok-and-youtube-analysis
+2.  **Navegue até o diretório do projeto:**
+    ```bash
+    cd tiktok-and-youtube-analysis
+    ```
 
-3. **Crie um ambiente virtual (recomendado):**
+3.  **Crie e ative um ambiente virtual (recomendado):**
 
-python -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
+    * **No Linux ou macOS:**
+        ```bash
+        python3 -m venv venv
+        source venv/bin/activate
+        ```
+    * **No Windows:**
+        ```powershell
+        python -m venv venv
+        .\venv\Scripts\activate
+        ```
 
-4. **Instale as dependências:**
+4.  **Instale as dependências necessárias:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-pip install -r requirements.txt
+5.  **Adicione o arquivo de dados:**
+    Certifique-se de que o arquivo `youtube_shorts_tiktok_trends_2025.csv` esteja localizado na raiz do diretório do projeto.
 
-5. **Execute o aplicativo Streamlit:**
+6.  **Execute o aplicativo Streamlit:**
+    ```bash
+    streamlit run dashboard_colab.py
+    ```
 
-streamlit run dashboard_colab.py
+Após executar o último comando, uma aba no seu navegador será aberta com o dashboard em funcionamento.
