@@ -1,56 +1,78 @@
-[![author](https://img.shields.io/badge/author-jaimejrs-red.svg)](https://www.linkedin.com/in/jaimejrs) [![](https://img.shields.io/badge/python-3.0+-blue.svg)](https://www.python.org/downloads/release/python-3137/) [![CC0: Domínio Público](https://img.shields.io/badge/License-CC0-white.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
-
-<p align="center">
-  <img src="https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/891cc3f18ed911f619c91b77eaa3337fd584d3fe/tiktokbanner.jpeg" >
-</p>
-
 # 📊 Dashboard de Análise de Vídeos Virais (TikTok & YouTube)
 
-[🚀 Acesse a minha análise aqui!](https://tiktok-and-youtube-analysis-d5l4tgkxmevvehe9xyogta.streamlit.app/)
+<p align="center">
+  <img src="assets/tiktokbanner.jpeg" alt="Banner do Projeto">
+</p>
 
-## Descrição do Projeto
+<p align="center">
+  <a href="https://tiktok-and-youtube-analysis-d5l4tgkxmevvehe9xyogta.streamlit.app/" target="_blank">
+    <img src="https://img.shields.io/badge/Acessar%20Dashboard-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white" alt="Link para o Dashboard">
+  </a>
+</p>
 
-Este projeto consiste em um dashboard interativo construído com Python e Streamlit para a análise exploratória de dados de vídeos virais das plataformas TikTok e YouTube Shorts. O painel permite a visualização de tendências, análise de fatores de engajamento, exploração de conteúdo e performance geográfica.
+<p align="center">
+  <a href="#-descrição-do-projeto">Descrição</a> •
+  <a href="#-principais-funcionalidades">Funcionalidades</a> •
+  <a href="#-preview-do-dashboard">Preview</a> •
+  <a href="#️-tecnologias-utilizadas">Tecnologias</a> •
+  <a href="#-como-executar-o-projeto">Como Executar</a> •
+  <a href="#-autor">Autor</a>
+</p>
 
-Este dashboard foi desenvolvido como parte de um projeto de análise de dados para demonstrar habilidades em ETL, criação de gráficos, visualização de dados, modelagem de machine learning e desenvolvimento de aplicações web interativas para a cadeira de Business Inteligence do curso de Adminitração da UFC.
+## 📖 Descrição do Projeto
 
-### Sobre o Conjunto de Dados 
+Este projeto consiste em um dashboard interativo construído para a análise exploratória de dados de vídeos virais do TikTok e YouTube Shorts. O objetivo é aplicar técnicas de Data Science para identificar os principais fatores que impulsionam o engajamento e a viralização de conteúdo em formato curto.
 
-[Acesse os dados aqui!](https://www.kaggle.com/datasets/tarekmasryo/youtube-shorts-and-tiktok-trends-2025)
+O painel foi desenvolvido como um projeto prático para demonstrar habilidades em ETL, análise estatística, modelagem de machine learning e desenvolvimento de aplicações web interativas com Python.
 
-Para esta análise, foi utilizado o dataset youtube_shorts_tiktok_trends_2025.csv, que agrega uma rica coleção de informações sobre vídeos de formato curto, abrangendo as plataformas TikTok e YouTube Shorts. A estrutura do dataset foi projetada para permitir uma investigação multifacetada dos fatores que impulsionam o sucesso de um vídeo. As colunas disponíveis podem ser agrupadas em três categorias principais: métricas de performance, como total de visualizações, taxa de engajamento, curtidas e compartilhamentos; atributos de conteúdo, que descrevem o vídeo em si, incluindo sua categoria (ex: Gaming, Food, Art), duração, palavras-chave do título e uso de emojis; e dados contextuais, que fornecem informações sobre a origem e distribuição, como plataforma, país, região, tipo de dispositivo e dados temporais (dia da semana e hora da publicação).
+### Sobre o Conjunto de Dados
 
-Essa combinação de dados quantitativos e qualitativos oferece uma base sólida para aplicar técnicas de análise exploratória, modelagem estatística e machine learning, com o objetivo final de extrair insights acionáveis sobre o que define um conteúdo viral e como otimizar a performance de vídeos curtos
+Os dados utilizados foram obtidos da plataforma Kaggle e agregam uma rica coleção de informações sobre vídeos, incluindo métricas de performance, atributos de conteúdo e dados contextuais. Para mais detalhes, acesse o [dataset original aqui](https://www.kaggle.com/datasets/tarekmasryo/youtube-shorts-and-tiktok-trends-2025).
 
-### Principais Funcionalidades
+---
 
-- **Visão Geral:** Métricas de performance, tendências temporais de visualizações e engajamento.
-- **Análise de Fatores:** Análise de como a duração, hora de postagem, dia da semana e categoria impactam o engajamento.
-- **Análise de Conteúdo:** Extração de palavras-chave, análise de sentimento de comentários e teste A/B sobre o uso de emojis.
-- **Análise Geográfica:** Visualização de performance por país e região.
-- **Filtros Interativos:** Permite filtrar os dados por País, Plataforma e Tipo de Dispositivo.
+## ✨ Principais Funcionalidades
 
-### Screenshot do Dashboard
+-   **Visão Geral:** Métricas consolidadas, tendências temporais de visualizações e engajamento médio.
+-   **Análise de Fatores:** Análise de como a duração, hora de postagem, dia da semana e categoria impactam a performance.
+-   **Análise de Conteúdo:** Extração das palavras-chave mais relevantes, análise de sentimento dos comentários com NLP e teste A/B sobre o uso de emojis nos títulos.
+-   **Análise Geográfica:** Visualização de performance por país e um heatmap de engajamento por região e categoria.
+-   **Filtros Interativos:** Permite segmentar toda a análise por País, Plataforma e Tipo de Dispositivo.
 
-![Print do Dashboard](https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/7dc68c01cf11fea09fafa87e9da2126eb0c1f00e/geral.jpg)
-![Print do Dashboard](https://github.com/jaimejrs/tiktok-and-youtube-analysis/blob/7dc68c01cf11fea09fafa87e9da2126eb0c1f00e/geografico.jpg)
+---
 
+## 🖥️ Preview do Dashboard
 
-### 🛠️ Tecnologias Utilizadas
+<table align="center">
+  <tr>
+    <td align="center"><strong>Visão Geral</strong></td>
+    <td align="center"><strong>Análise Geográfica</strong></td>
+  </tr>
+  <tr>
+    <td><img src="assets/geral.jpg" alt="Screenshot da Visão Geral do Dashboard" width="100%"></td>
+    <td><img src="assets/geografico.jpg" alt="Screenshot da Análise Geográfica" width="100%"></td>
+  </tr>
+</table>
+
+---
+
+## 🛠️ Tecnologias Utilizadas
 
 Este projeto foi construído utilizando um ecossistema moderno de ferramentas de Python para análise e visualização de dados.
 
-* **Linguagem:** `Python 3`
-* **Análise e Manipulação de Dados:** `Pandas`, `NumPy`
-* **Cálculo Científico:** `SciPy` (para testes estatísticos)
-* **Visualização de Dados:** `Plotly`
-* **Dashboard Interativo:** `Streamlit`
-* **Machine Learning e NLP:**
-    * `Scikit-learn` (para o modelo de *Random Forest*)
-    * `Transformers` (Hugging Face para Análise de Sentimento)
-    * `NLTK` (para processamento de texto e *stopwords*)
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white" alt="Streamlit">
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas">
+  <img src="https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white" alt="Plotly">
+  <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white" alt="Scikit-learn">
+  <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=hugging-face&logoColor=black" alt="Hugging Face Transformers">
+  <img src="https://img.shields.io/badge/NLTK-3776AB?style=for-the-badge&logo=nltk&logoColor=white" alt="NLTK">
+</p>
 
-### 🚀 Como Executar o Projeto
+---
+
+## 🚀 Como Executar o Projeto
 
 Para executar este dashboard interativo em sua máquina local, siga os passos abaixo:
 
@@ -89,5 +111,14 @@ Para executar este dashboard interativo em sua máquina local, siga os passos ab
     ```bash
     streamlit run dashboard_colab.py
     ```
-
 Após executar o último comando, uma aba no seu navegador será aberta com o dashboard em funcionamento.
+
+---
+
+## 👨‍💻 Autor
+
+Feito com ❤️ por **JaimeJrs**.
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0e75b6?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jaimejrs/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/jaimejrs)
+[![Medium](https://img.shields.io/badge/Medium-000000?style=for-the-badge&logo=medium&logoColor=white)](https://medium.com/@jaimejrs)
