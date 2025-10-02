@@ -1,4 +1,4 @@
-# dashboard_colab_refatorado.py
+# dashboard_colab.py
 
 # --- 1. Importação das Bibliotecas ---
 import streamlit as st
