@@ -28,19 +28,6 @@ except LookupError:
 
 st.set_page_config(layout="wide", page_title="Análise de Vídeos Virais")
 
-Com certeza! Você quer a flexibilidade do st.multiselect (múltiplas seleções, menu suspenso/recolhido) com uma organização melhorada.
-
-A melhor maneira de fazer isso é adicionar uma pequena lógica de "Selecionar Todos" com um st.checkbox para cada filtro. Isso mantém a interface limpa e dá ao usuário um atalho muito útil para selecionar ou limpar as opções.
-
-Abaixo está a modificação do seu código original, aplicando essa melhoria.
-
-Código Reformulado (Pronto para Copiar e Colar)
-Substitua o trecho de código # --- 3. Carregamento Inicial e Filtros --- no seu arquivo app.py por este bloco:
-
-Python
-
-# app.py
-
 # --- 3. Carregamento Inicial e Filtros ---
 
 df_original = carregar_dados('data/youtube_shorts_tiktok_trends_2025.csv')
