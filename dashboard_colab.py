@@ -1,4 +1,4 @@
-# dashboard_colab.py
+# app.py
 
 # --- 1. Importação das Bibliotecas ---
 import streamlit as st
