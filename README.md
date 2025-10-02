@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://tiktok-and-youtube-analysis-d5l4tgkxmevvehe9xyogta.streamlit.app/" target="_blank">
+  <a href="https://tktk-and-youtube-analysis.streamlit.app/" target="_blank">
     <img src="https://img.shields.io/badge/Acessar%20Dashboard-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white" alt="Link para o Dashboard">
   </a>
 </p>
@@ -109,7 +109,7 @@ Para executar este dashboard interativo em sua máquina local, siga os passos ab
 
 6.  **Execute o aplicativo Streamlit:**
     ```bash
-    streamlit run dashboard_colab.py
+    streamlit run app.py
     ```
 Após executar o último comando, uma aba no seu navegador será aberta com o dashboard em funcionamento.
 
