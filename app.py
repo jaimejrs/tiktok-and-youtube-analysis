@@ -28,40 +28,54 @@ except LookupError:
 
 st.set_page_config(layout="wide", page_title="Análise de Vídeos Virais")
 
+Com certeza! Você quer a flexibilidade do st.multiselect (múltiplas seleções, menu suspenso/recolhido) com uma organização melhorada.
+
+A melhor maneira de fazer isso é adicionar uma pequena lógica de "Selecionar Todos" com um st.checkbox para cada filtro. Isso mantém a interface limpa e dá ao usuário um atalho muito útil para selecionar ou limpar as opções.
+
+Abaixo está a modificação do seu código original, aplicando essa melhoria.
+
+Código Reformulado (Pronto para Copiar e Colar)
+Substitua o trecho de código # --- 3. Carregamento Inicial e Filtros --- no seu arquivo app.py por este bloco:
+
+Python
+
+# app.py
+
 # --- 3. Carregamento Inicial e Filtros ---
 
 df_original = carregar_dados('data/youtube_shorts_tiktok_trends_2025.csv')
 
 st.sidebar.header("Filtros")
 
-# --- FILTRO DE PAÍSES (multiselect com "Selecionar Todos") ---
+# --- FILTRO DE PAÍSES ---
 todos_paises_options = sorted(df_original['country'].unique())
 selecionar_todos_paises = st.sidebar.checkbox("Selecionar Todos os Países", value=True)
 
 if selecionar_todos_paises:
-    paises_selecionados = st.sidebar.multiselect(
+    paises = st.sidebar.multiselect(
         "Selecione os Países:",
         options=todos_paises_options,
-        default=todos_paises_options
+        default=todos_paises_options  # Começa com todos selecionados
     )
 else:
-    paises_selecionados = st.sidebar.multiselect(
+    paises = st.sidebar.multiselect(
         "Selecione os Países:",
         options=todos_paises_options
+        # Começa com a lista vazia
     )
 
-# --- FILTRO DE PLATAFORMAS (multiselect com "Selecionar Todas") ---
+# --- FILTRO DE PLATAFORMAS ---
 todas_plataformas_options = sorted(df_original['platform'].unique())
 selecionar_todas_plataformas = st.sidebar.checkbox("Selecionar Todas as Plataformas", value=True)
 
 if selecionar_todas_plataformas:
-    plataformas_selecionadas = st.sidebar.multiselect(
+    plataformas = st.sidebar.multiselect(
         "Selecione as Plataformas:",
         options=todas_plataformas_options,
         default=todas_plataformas_options
     )
 else:
-    plataformas_selecionadas = st.sidebar.multiselect(
+    plataformas = st.sidebar.multiselect(
         "Selecione as Plataformas:",
         options=todas_plataformas_options
     )
@@ -71,22 +85,23 @@ todos_dispositivos_options = sorted(df_original['device_type'].unique())
 selecionar_todos_dispositivos = st.sidebar.checkbox("Selecionar Todos os Dispositivos", value=True)
 
 if selecionar_todos_dispositivos:
-    dispositivos_selecionados = st.sidebar.multiselect(
+    tipos_dispositivo = st.sidebar.multiselect(
         "Selecione o Device:",
         options=todos_dispositivos_options,
         default=todos_dispositivos_options
     )
 else:
-    dispositivos_selecionados = st.sidebar.multiselect(
+    tipos_dispositivo = st.sidebar.multiselect(
         "Selecione o Device:",
         options=todos_dispositivos_options
     )
 
 # --- LÓGICA DE FILTRAGEM ---
-# A query funciona perfeitamente com as listas geradas pelos multiselects
+# A query funciona perfeitamente com as novas variáveis
 df_filtrado = df_original.query(
-    "country == @paises_selecionados and platform == @plataformas_selecionadas and device_type == @dispositivos_selecionados"
+    "country == @paises and platform == @plataformas and device_type == @tipos_dispositivo"
 )
+
 # --- 4. Construção do Dashboard ---
 st.title("📊🎦 Análise de Performance de Vídeos Virais")
 
