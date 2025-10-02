@@ -31,7 +31,7 @@ def carregar_dados(caminho_arquivo: str) -> pd.DataFrame:
     """Carrega os dados de um arquivo CSV, tratando datas e criando colunas temporais."""
     df = pd.read_csv(
         caminho_arquivo,
-        encoding='utf-8',  # Padronizado para UTF-8 para maior compatibilidade.
+        encoding='utf-8',
         delimiter=',',
         parse_dates=['publish_date_approx']
     )
@@ -61,7 +61,6 @@ def analisar_sentimento(_df: pd.DataFrame, _pipeline) -> pd.DataFrame:
             if score > 3: return 'Positivo'
             if score < 3: return 'Negativo'
             return 'Neutro'
-        # Captura exceções específicas para melhor depuração.
         except (IndexError, KeyError, RuntimeError):
             return 'N/A'
 
@@ -81,7 +80,6 @@ def treinar_modelo_features(_df: pd.DataFrame) -> pd.Series:
     if df_model.empty:
         return pd.Series(dtype='float64')
 
-    # Codificação de categóricos de forma idiomática com pandas
     for col in df_model.select_dtypes(include=['object']).columns:
         df_model[col] = df_model[col].astype('category').cat.codes
 
@@ -114,7 +112,6 @@ paises = st.sidebar.multiselect("Selecione os Países:", options=sorted(df_origi
 plataformas = st.sidebar.multiselect("Selecione as Plataformas:", options=sorted(df_original['platform'].unique()), default=df_original['platform'].unique())
 tipos_dispositivo = st.sidebar.multiselect("Selecione o Device:", options=sorted(df_original['device_type'].unique()), default=df_original['device_type'].unique())
 
-# Utiliza o método .query() para um código mais legível.
 df_filtrado = df_original.query(
     "country == @paises and platform == @plataformas and device_type == @tipos_dispositivo"
 )
@@ -128,7 +125,6 @@ if df_filtrado.empty:
 else:
     tab1, tab2, tab3, tab4 = st.tabs(["Visão Geral", "Análise dos Fatores", "Análise do Conteúdo", "Análise Geográfica"])
 
-    # --- ABA 1: VISÃO GERAL ---
     with tab1:
         st.header("Visão Geral dos Dados")
         col1, col2 = st.columns(2)
@@ -145,7 +141,6 @@ else:
             if not importancias_filtradas.empty:
                 plotar_grafico_barra(importancias_filtradas, importancias_filtradas.values, importancias_filtradas.index, 'Importância dos Fatores para o Engajamento', orientation='h', color=importancias_filtradas.index, labels={'x': 'Importância Relativa', 'y': 'Fator'})
 
-    # --- ABA 2: ANÁLISE DOS FATORES ---
     with tab2:
         st.header("Análise de Fatores de Performance")
         col1, col2 = st.columns(2)
@@ -158,7 +153,6 @@ else:
         with col2:
             bins = [0, 15, 30, 60, 120, np.inf]
             labels = ['0-15s', '16-30s', '31-60s', '61-120s', '120s+']
-            # Evita cópia desnecessária do DataFrame.
             df_filtrado['duration_bin'] = pd.cut(df_filtrado['duration_sec'], bins=bins, labels=labels, right=False)
             engagement_by_duration = df_filtrado.groupby('duration_bin', observed=True)['engagement_rate'].mean().reset_index()
             plotar_grafico_barra(engagement_by_duration, 'duration_bin', 'engagement_rate', 'Engajamento por Duração do Vídeo', color='duration_bin', labels={'duration_bin': 'Faixa de Duração', 'engagement_rate': 'Taxa de Engajamento Média'})
@@ -167,7 +161,6 @@ else:
             engagement_by_weekday = df_filtrado.groupby('publish_dayofweek')['engagement_rate'].mean().reindex(dias_ordem).reset_index()
             plotar_grafico_barra(engagement_by_weekday, 'publish_dayofweek', 'engagement_rate', 'Engajamento por Dia da Semana', color='publish_dayofweek', labels={'publish_dayofweek': 'Dia da Semana', 'engagement_rate': 'Taxa de Engajamento Média'}, log_y=True)
 
-    # --- ABA 3: ANÁLISE DO CONTEÚDO ---
     with tab3:
         st.header("Análise do Conteúdo dos Vídeos")
         st.subheader("Top 10 Palavras-chave (Alto Engajamento)")
@@ -178,7 +171,6 @@ else:
         all_keywords = " ".join(df_high_engagement['title_keywords'].dropna())
         words = re.findall(r'\b\w+\b', all_keywords.lower())
 
-        # Utiliza NLTK para uma lista de stopwords mais robusta.
         stop_words_pt = set(stopwords.words('portuguese'))
         stop_words_en = set(stopwords.words('english'))
         all_stopwords = stop_words_pt.union(stop_words_en).union(['â','for','in','on','is','i','to'])
@@ -198,10 +190,8 @@ else:
 
         if not df_sentimento.empty:
             sentiment_distribution = df_sentimento.groupby(['category', 'sentiment']).size().unstack(fill_value=0)
-            # Normaliza para exibir em percentual (stack de 100%)
             sentiment_distribution_norm = sentiment_distribution.div(sentiment_distribution.sum(axis=1), axis=0)
             
-            # Gráfico de barras empilhadas com Plotly Express (mais conciso).
             fig = px.bar(sentiment_distribution_norm, 
                          barmode='stack', 
                          color_discrete_map={'Positivo': 'seagreen', 'Neutro': 'gold', 'Negativo': 'tomato'},
@@ -212,7 +202,6 @@ else:
             st.info("Não há comentários para analisar com os filtros atuais.")
 
         st.subheader("Teste A/B: Engajamento com vs. Sem Emoji no Título")
-        # Usando .query() para clareza
         com_emoji = df_filtrado.query("has_emoji == 1")['engagement_rate'].dropna()
         sem_emoji = df_filtrado.query("has_emoji == 0")['engagement_rate'].dropna()
 
@@ -245,16 +234,22 @@ else:
             log_x=True, size_max=60, text='country',
             labels={"avg_views": "Média de Visualizações (Log)", "avg_engagement_rate": "Taxa de Engajamento Média"}
         )
-        fig.update_traces(textposition='top center')
+        
+        # Correção aplicada para posicionar texto dentro dos círculos
+        fig.update_traces(
+            textposition='middle center', 
+            textfont=dict(color='white')
+        )
+        
         fig.update_layout(showlegend=False)
         st.plotly_chart(fig, use_container_width=True)
 
         st.subheader("Taxa de Engajamento por Categoria e Região")
         pivot_engagement = df_filtrado.pivot_table(values='engagement_rate', index='region', columns='category', aggfunc='mean')
         if not pivot_engagement.empty:
-            fig = px.imshow(pivot_engagement, text_auto=".3f", aspect="auto",
+            fig_heatmap = px.imshow(pivot_engagement, text_auto=".3f", aspect="auto",
                             labels=dict(x="Categoria", y="Região", color="Engajamento Médio"),
                             color_continuous_scale='YlGnBu')
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig_heatmap, use_container_width=True)
         else:
             st.info("Não há dados suficientes para criar o heatmap com os filtros atuais.")
